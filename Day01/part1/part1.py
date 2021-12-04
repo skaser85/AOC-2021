@@ -1,4 +1,5 @@
-input_file = 'Day01\part1_input.txt'
+# input_file = r'Day01\part1\test_input.txt'
+input_file = r'Day01\input.txt'
 
 with open(input_file, 'r') as f:
     line = f.readline()
