@@ -127,9 +127,9 @@ with open(input_file, 'r') as f:
     if len(board_values) > 0:
         boards.append(Board.make_board(board_values))
 
+winning_board_scores = []
 for num in numbers_to_draw:
-    board_has_won = False
-    for i, board in enumerate(boards):
+    for i, board in enumerate([b for b in boards if not b.winner]):
         if board.check_board(num):
             board.print_board(i)
             if board.has_won():
@@ -138,7 +138,6 @@ for num in numbers_to_draw:
                 print(f'{total_unmarked = }')
                 board_score = num * total_unmarked
                 print(f'{board_score = }\n')
-                board_has_won = True
-                break
-    if board_has_won:
-        break
+                winning_board_scores.append(board_score)
+
+print(winning_board_scores[-1])
