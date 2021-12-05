@@ -34,15 +34,11 @@ class Line:
             y = self.pBegin.y
             if self.pBegin.y < self.pEnd.y:
                 while y <= self.pEnd.y:
-                    p = Point(x,y)
-                    p.cross()
-                    self.points.append(p)
+                    self.points.append(Point(x,y))
                     y += 1
             else:
                 while y >= self.pEnd.y:
-                    p = Point(x,y)
-                    p.cross()
-                    self.points.append(p)
+                    self.points.append(Point(x,y))
                     y -= 1
         elif self.pBegin.y == self.pEnd.y:
             # horizontal line
@@ -50,16 +46,23 @@ class Line:
             y = self.pBegin.y
             if self.pBegin.x < self.pEnd.x:
                 while x <= self.pEnd.x:
-                    p = Point(x,y)
-                    p.cross()
-                    self.points.append(p)
+                    self.points.append(Point(x,y))
                     x += 1
             else:
                 while x >= self.pEnd.x:
-                    p = Point(x,y)
-                    p.cross()
-                    self.points.append(p)
+                    self.points.append(Point(x,y))
                     x -= 1
+        else:
+            # diagonal line
+            x = self.pBegin.x
+            y = self.pBegin.y
+            x_dir = 1 if self.pBegin.x < self.pEnd.x else -1
+            y_dir = 1 if self.pBegin.y < self.pEnd.y else -1
+            while x != self.pEnd.x and y != self.pEnd.y:
+                self.points.append(Point(x,y))
+                x += x_dir
+                y += y_dir
+            self.points.append(Point(self.pEnd.x, self.pEnd.y))
 
 board = []
 for y in range(board_size):
@@ -95,6 +98,7 @@ for y in range(board_size):
             if b.line_count > 1:
                 multi_crossings += 1
             s += str(b.line_count)
-    # print(s)
+    if testing:
+        print(s)
 
 print(multi_crossings)
