@@ -17,15 +17,17 @@ class Fish:
 
     def cycle_day(self) -> Fish:
         f = None
+        got_reset = False
         if self.spawn_timer == 0:
             self.spawn_timer = 6
+            got_reset = True
             f = Fish(8)
-        if f is None:
+        if not got_reset:
             self.spawn_timer -= 1
         return f
 
-# fishes = []
-days_to_simulate = 80
+days_to_simulate = 256
+fish_files = r'Day06\fish_files'
 
 def get_fishes_from_file(file_path: str) -> List[Fish]:
     fishes = []
@@ -35,49 +37,55 @@ def get_fishes_from_file(file_path: str) -> List[Fish]:
             fishes.append(Fish(int(n)))
     return fishes
 
-fish_files = r'Day06\fish_files'
-if len(os.listdir(fish_files)):
-    for ff in os.listdir(fish_files):
-        os.remove(os.path.join(fish_files, ff))
+def clear_fishes_files():
+    if len(os.listdir(fish_files)):
+        for ff in os.listdir(fish_files):
+            os.remove(os.path.join(fish_files, ff))
 
-copyfile(input_file, os.path.join(fish_files,'initial.txt'))
 
+fishes = get_fishes_from_file(input_file)
 new_fishes = []
-for i in range(days_to_simulate+1):
+
+log = []
+clear_fishes_files()
+copyfile(input_file, os.path.join(fish_files,'initial.txt'))
+for i in range(days_to_simulate):
     print(i)
+    if testing:
+        if i > 0:
+            log_entry = f'After {str(i-1).rjust(2, " ")} day{"s" if i > 1 else " "}: ({str(len(fishes)).zfill(2)}) {[f.spawn_timer for f in fishes]}'
+            log.append(log_entry)
+            print(log_entry)
+
     for fi, ff in enumerate(os.listdir(fish_files)):
-        if ff.startswith('x_'):
-            continue
         ff_path = os.path.join(fish_files,ff)
         fishes = get_fishes_from_file(ff_path)
         new_fishes = []
         
         for f in fishes:
             new_fish = f.cycle_day()
-            if new_fish is not None:
-                new_fishes.append(new_fish)
+            new_fishes.append(new_fish)
 
-        fishes.extend(new_fishes)
-
-        ff2 = f'x_{ff}'
-        ff2_path = os.path.join(fish_files,ff2)
-        if os.path.exists(ff2_path):
-            os.remove(ff2_path)
-        os.rename(ff_path, ff2_path)
+        fishes.extend([f for f in new_fishes if f is not None])
         
-        for i in range(0,len(fishes),100_000):
-            fishes_to_save = [str(f.spawn_timer) for f in fishes[i:i+100_000]]
-            save_path = os.path.join(fish_files, f'fishes_{fi}_{i}.txt')
+        os.remove(ff_path)
+        si = 0
+        for sf in range(0,len(fishes),10_000_000):
+            si += 1
+            fishes_to_save = [str(f.spawn_timer) for f in fishes[sf:sf+10_000_000]]
+            save_path = os.path.join(fish_files, f'fishes_Day-{i}_File Number-{fi}_Day File Iteration-{si}.txt')
             with open(save_path, 'w') as save_file:
                 save_file.write(','.join(fishes_to_save))
             
 
-# if testing:
-#     print(f'After {str(i+1).rjust(2, " ")} day{"s" if i > 1 else " "}: ({str(len(fishes)).zfill(2)}) {[f.spawn_timer for f in fishes]}')
+if testing:
+    log_entry = f'After {str(i).rjust(2, " ")} day{"s" if i > 1 else " "}: ({str(len(fishes)).zfill(2)}) {[f.spawn_timer for f in fishes]}'
+    log.append(log_entry)
+    print(log_entry)
+    with open(f'Day06\log2.txt', 'w') as f:
+        f.write('\n'.join(log))
 fishes = []
 for ff in os.listdir(fish_files):
-    if ff.startswith('x_'):
-        continue
     ff_path = os.path.join(fish_files,ff)
     f = []
     f1 = fishes[:]
@@ -86,3 +94,4 @@ for ff in os.listdir(fish_files):
     f.extend(f2)
     fishes = f[:]
 print(len(fishes))
+clear_fishes_files()
