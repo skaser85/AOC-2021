@@ -1,7 +1,3 @@
-from __future__ import annotations
-from typing import List, Tuple
-from dataclasses import dataclass, field
-
 testing = False
 
 if testing:
@@ -9,17 +5,7 @@ if testing:
 else:
     input_file = r'Day06\input.txt'
 
-fishes = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0
-}
+fishes = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
 days_to_simulate = 256
 
 with open(input_file, 'r') as f:
@@ -28,12 +14,11 @@ with open(input_file, 'r') as f:
         fishes[int(n)] += 1
 
 for d in range(days_to_simulate):
-    new_fishes = {0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0}
+    new_fishes = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0}
     for f in range(len(fishes)):
         if f == 0:
-            if fishes[f] > 0:
-                new_fishes[8] = fishes[f]
-                new_fishes[6] = fishes[f]
+            new_fishes[8] = fishes[f]
+            new_fishes[6] = fishes[f]
         else:
             new_fishes[f-1] += fishes[f]
     fishes = new_fishes
