@@ -5,11 +5,7 @@ import os
 
 def parse_input(file_path: str) -> Any:
     with open(file_path, 'r') as f:
-        init = f.read().split(',')
-        crabs = []
-        for i in init:
-            crabs.append(int(i))
-    return crabs
+        return [int(c) for c in f.read().split(',')]
 
 def calc_fuel_usage(crabs: List[int], target: int) -> int:
     fuel = 0
