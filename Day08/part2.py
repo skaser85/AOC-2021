@@ -261,30 +261,3 @@ if __name__ == '__main__':
         summed += o
 
     print(summed)
-
-
-
-
-
-
-
-
-
-    # segs = {
-    #     'acedgfb': 8,
-    #     'cdfbe': 5,
-    #     'gcdfa': 2,
-    #     'fbcad': 3,
-    #     'dab': 7,
-    #     'cefabd': 9,
-    #     'cdfgeb': 6,
-    #     'eafb': 4,
-    #     'cagedb': 0,
-    #     'ab': 1
-    # }
-
-    # s2 = {}
-    # for s in segs:
-    #     s2[''.join(sorted(s))] = segs[s]
-
-    # segs = s2
